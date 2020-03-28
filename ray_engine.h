@@ -3,15 +3,19 @@
 #include "const_trig.h"
 #include <stdlib.h>
 #include <iostream>
-
+#include <string>
 #include "bitmap.h"
 
-#define PI 3.14159
-#define to_radian(angle) (angle/180.0)*PI
 
+/*#define PI 3.14159
+#define to_radian(angle) (angle/180.0)*PI*/
+
+
+// Engine Constants
 #define __RAY_ENGINE_WALL_HEIGHT__ 2
+#define NB_WALL_TEXTURE 2
+#define NB_FLOOR_TEXTURE 2
 
-#define DEBUG(val) std::cerr << val << std::endl ;
 
 class Ray_engine {
 
@@ -24,20 +28,27 @@ class Ray_engine {
     static unsigned int width  ;
     static unsigned int FOV ;
     static unsigned int HALF_FOV ;
+	static unsigned int cam_distance;
     static unsigned int angle_step ;
+	static unsigned int fog;
+	static unsigned int texture_height;
+	static unsigned int texture_width;
+	
 
     // Map
 
-    static unsigned int** map ;
+    static unsigned int** wall_map ;
+	static unsigned int** floor_map ;
     static int map_height ;
     static int map_width ;
 
     // Display
+ 	
+    static SDL_Texture * wall_texture[NB_FLOOR_TEXTURE] ;
+	static SDL_Texture * background_texture ;
+	
 
-    static SDL_Surface * image ;
-    static SDL_Texture * texture ;
-
-    static unsigned char* floor_surface ;
+    static unsigned char* floor_surface[NB_FLOOR_TEXTURE];
 
 
   public:

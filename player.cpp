@@ -2,6 +2,7 @@
 #include "player.h"
 
 
+
 Player::Player() {
   this->leave = true ;
   this->x = 0 ;
@@ -47,8 +48,8 @@ bool Player::get_leave() {
   return this->leave ;
 }
 
-void Player::set_level(Level* my_level) {
-  this->array = my_level->get_array() ;
+void Player::set_level(Level* my_level) {  
+  this->current_level = my_level;
 }
 
 
@@ -85,6 +86,10 @@ void Player::input_from_keyboard() {
   } // end while loop.
   // Update coordinates.
   // /!\ For now, collision engine is in the Player class but should be moved soon.
+  
+  unsigned int** wall_array = this->current_level->get_wall_array() ; 
+  unsigned int map_width = this->current_level->get_width() ; 
+  unsigned int map_height = this->current_level->get_width() ; 
 
   this->angle += delta_a*this->speed_angle ;
   if (this->angle < 0) { this->angle += 3600 ; }
@@ -94,9 +99,10 @@ void Player::input_from_keyboard() {
 
 
   new_x = this->x+this->speed_step*const_trig::fast_cos(this->angle)*delta_s ;
-  if (!this->array[(int) this->y][(int) new_x]) { this->x = new_x ;}
+  if (!wall_array[(int) this->y][(int) new_x] && (new_x >= 0 && new_x < map_width)  ) { this->x = new_x ;}
   new_y = this->y+this->speed_step*const_trig::fast_sin(this->angle)*delta_s ;
-  if (!this->array[(int) new_y][(int) this->x]) { this->y = new_y ;}
+  if (!wall_array[(int) new_y][(int) this->x] && (new_y >= 0 && new_y < map_height)) { this->y = new_y ;}
+
 
 
 } // end function

@@ -5,9 +5,11 @@
 
 #include <math.h>
 
+
 #include "SDL2/SDL.h"
 #include "level.h"
 #include "const_trig.h"
+#include "level.h"
 
 #define __DEFAULT_ANGLE_SPEED__ 100 // 1 does actually mean 0.1 degree
 #define __DEFAULT_STEP_SPEED__ 0.05
@@ -20,8 +22,9 @@ class Player {
     float x ;
     float y ;
     float speed_step ;
-    int angle, speed_angle ;
-    unsigned int** array ;
+    int angle, speed_angle ;    
+	Level* current_level ; 
+	
 
   public:
 

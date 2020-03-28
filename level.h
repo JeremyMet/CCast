@@ -9,7 +9,8 @@ class Level {
   private:
     unsigned int height ;
     unsigned int width ;
-    unsigned int** array ;
+    unsigned int** wall_array ;
+	unsigned int** floor_array ;
 
   public:
 
@@ -23,7 +24,8 @@ class Level {
     // Accessors
     unsigned int get_height();
     unsigned int get_width();
-    unsigned int** get_array();
+    unsigned int** get_wall_array();
+	unsigned int** get_floor_array();
 
 
 
