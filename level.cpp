@@ -70,7 +70,7 @@ bool Level::load(std::string path) {
 	   line++ ;
 	}
 	line = 0 ; 
-	std::getline(file, local); // separator between walls and floor
+	//std::getline(file, local); // separator between walls and floor
 	while(std::getline(file, local) && line < this->height)
 	{
 	   for(int i=0;i<this->width;i++) {this->floor_array[line][i] = int(local.at(i << 1)-'0') ; }

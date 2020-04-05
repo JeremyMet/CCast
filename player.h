@@ -36,7 +36,7 @@ class Player {
     void set_y(float y);
     float get_x();
     float get_y() ;
-     int get_angle() ;
+    int get_angle() ;
     bool get_leave();
     void set_level(Level* my_level);
     void input_from_keyboard();

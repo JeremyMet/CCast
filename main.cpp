@@ -16,12 +16,16 @@
 
 
 
+#define __GAME_NAME__ "Raycing by TersaKen Studio"
+#define __GAME_VERSION__ "v0.1"
+
 
 int main(int argc, char* argv[])
 {
     Level my_level("level.lvl") ;
-    Player my_player(1.5, 1.5) ;
+    Player my_player(1, 1) ;
     my_player.set_level(&my_level) ;
+	Ray_engine inst_Ray_engine ;
 
 
 
@@ -30,14 +34,15 @@ int main(int argc, char* argv[])
         SDL_Window* window = NULL;
         SDL_Renderer* renderer = NULL;
         if (SDL_CreateWindowAndRenderer(640, 480, 0, &window, &renderer) == 0) {
+			SDL_SetWindowTitle(window, __GAME_NAME__ " " __GAME_VERSION__);
             //SDL_SetWindowFullscreen(window, SDL_WINDOW_FULLSCREEN) ;
             SDL_bool done = SDL_FALSE;
-            Ray_engine::init(renderer, &my_level) ;
+            inst_Ray_engine.init(renderer, &my_level) ;
             while (my_player.get_leave()) {
               clock_t begin = clock();
               // Ctrl
               my_player.input_from_keyboard() ;
-              Ray_engine::render(renderer, &my_player) ;
+              inst_Ray_engine.render(renderer, &my_player) ;
               clock_t end = clock();
               //std::cerr << CLOCKS_PER_SEC/(double)(end - begin) << std::endl ;
             } // end main loop

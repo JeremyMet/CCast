@@ -99,9 +99,9 @@ void Player::input_from_keyboard() {
 
 
   new_x = this->x+this->speed_step*const_trig::fast_cos(this->angle)*delta_s ;
-  if (!wall_array[(int) this->y][(int) new_x] && (new_x >= 0 && new_x < map_width)  ) { this->x = new_x ;}
+  if ((new_x >= 0 && new_x < map_width) && !wall_array[(int) this->y][(int) new_x]) { this->x = new_x ;}
   new_y = this->y+this->speed_step*const_trig::fast_sin(this->angle)*delta_s ;
-  if (!wall_array[(int) new_y][(int) this->x] && (new_y >= 0 && new_y < map_height)) { this->y = new_y ;}
+  if ((new_y >= 0 && new_y < map_height) && !wall_array[(int) new_y][(int) this->x]) { this->y = new_y ;}
 
 
 
