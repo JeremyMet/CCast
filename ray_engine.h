@@ -14,24 +14,23 @@
 
 
 extern Sprite sprite_array[NB_SPRITE_MAX];
-
+extern Level current_level;
 
 class Ray_engine {
 
 
   private:
-
     // Engine Parameters
     static unsigned int height ;
     static unsigned int half_height ;
     static unsigned int width  ;
     static unsigned int FOV ;
     static unsigned int HALF_FOV ;
-	static unsigned int wall_max_height;
+	  static unsigned int wall_max_height;
     static unsigned int angle_step ;
-	static unsigned int fog;
-	static unsigned int texture_height;
-	static unsigned int texture_width;
+	  static unsigned int fog;
+	  static unsigned int texture_height;
+	  static unsigned int texture_width;
 
 
     // Map and Sprite
@@ -54,7 +53,7 @@ class Ray_engine {
   public:
 	   Ray_engine() ;
      ~Ray_engine() ;
-	    static void init(SDL_Renderer* renderer, Level* level_arg);
+	    static void init(SDL_Renderer* renderer);
       static void render(SDL_Renderer* renderer);
 
 } ;

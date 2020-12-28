@@ -51,23 +51,25 @@ Ray_engine::Ray_engine() {
 	sprite_array[2].type = 0;
 	sprite_array[2].x = 1.4;
 	sprite_array[2].y = 25.0;
+	sprite_array[2].active = true ;
 
 	sprite_array[1].type = 0;
 	sprite_array[1].x = 1.4;
 	sprite_array[1].y = 13;
+	sprite_array[1].active = true ;
 
 }
 
-void Ray_engine::init(SDL_Renderer* renderer, Level* level_arg)
+void Ray_engine::init(SDL_Renderer* renderer)
 {
 	half_height = height >> 1 ; // to be changed => half to static
 	HALF_FOV = FOV >> 1 ;
 	angle_step = FOV/width ;
 	/* map part */
-	wall_map = level_arg->get_wall_array() ;
-	floor_map = level_arg->get_floor_array() ;
-	map_width = level_arg->get_width() ;
-	map_height = level_arg->get_height() ;
+	wall_map = current_level.get_wall_array() ;
+	floor_map = current_level.get_floor_array() ;
+	map_width = current_level.get_width() ;
+	map_height = current_level.get_height() ;
 	/* Wall Textures Loading */
 	for(int i=0;i<NB_WALL_TEXTURE;i++) {
 		std::string path = "media/img/wall/wall_" ;
@@ -120,7 +122,6 @@ void Ray_engine::render(SDL_Renderer* renderer){
 	//  Initialization //
 	/////////////////////
 	float player_angle = sprite_array[0].angle ;
-	std::cerr << "versus " << player_angle << std::endl;
 	float x = sprite_array[0].x ;
 	float y = sprite_array[0].y ;
 	int angle = (player_angle-HALF_FOV) ;
@@ -136,8 +137,6 @@ void Ray_engine::render(SDL_Renderer* renderer){
 		float y_ray_vector = const_trig::fast_sin(angle) ;
 		float length_x_ray_vector = fabs(1.0/x_ray_vector) ;
 		float length_y_ray_vector = fabs(1.0/y_ray_vector) ;
-
-
 		int x_map = (int) x ;
 		int y_map = (int) y ;
 		///////////////////////////////
@@ -171,14 +170,14 @@ void Ray_engine::render(SDL_Renderer* renderer){
 		unsigned int tile_type = 0 ;
 		while(!hit) {
 		  if (x_ray_length < y_ray_length) {
-			x_map+= delta_x ;
-			x_ray_length += length_x_ray_vector ;
-			x_side = false ;
+				x_map+= delta_x ;
+				x_ray_length += length_x_ray_vector ;
+				x_side = false ;
 		  }
 		  else {
-			y_map+= delta_y ;
-			y_ray_length += length_y_ray_vector ;
-			x_side = true ;
+				y_map+= delta_y ;
+				y_ray_length += length_y_ray_vector ;
+				x_side = true ;
 		  }
 		  if (x_map < 0 || x_map >= map_width) { hit = true ;  }
 		  else if (y_map < 0 || y_map >= map_height)  { hit = true ; }
@@ -271,27 +270,27 @@ void Ray_engine::render(SDL_Renderer* renderer){
 		  }
 		}
 	} // end while for ray casting.
-
-
 	/////////////////
 	// Sprite Part //
 	/////////////////
 	unsigned int nb_of_displayed_sprites = 0 ;
 	float HALF_FOV_ANGLE = const_trig::fast_cos(HALF_FOV) ;
-	for(unsigned int i=0;i<NB_SPRITE_MAX;i++) {
-		float sprite_vector_x = sprite_array[i].x - x ;
-		float sprite_vector_y = sprite_array[i].y - y ;
-		float plan_vector_x = const_trig::fast_cos(player_angle) ;
-		float plan_vector_y = const_trig::fast_sin(player_angle) ;
-		float cos_current_angle_with_sprite = (sprite_vector_x*plan_vector_x+sprite_vector_y*plan_vector_y);
-		float sin_current_angle_with_sprite = (sprite_vector_y*plan_vector_x-sprite_vector_x*plan_vector_y);
-		float tan_current_angle_with_sprite = (sin_current_angle_with_sprite/cos_current_angle_with_sprite+0.0000001);
-			if (tan_current_angle_with_sprite > -0.4 && tan_current_angle_with_sprite < 0.6 && cos_current_angle_with_sprite > 0) {
-			  // Calcul de la distance pour la gestion du z_buffer --------------------------------------------------------------
-				float dist_with_sprite = sqrt(sprite_vector_x*sprite_vector_x+sprite_vector_y*sprite_vector_y)+0.0000001;
-				zbuffer_sprite_t tmp_sprite = {sprite_array[i].type, dist_with_sprite, tan_current_angle_with_sprite};
-				zbuffer_sprite_array[nb_of_displayed_sprites] = tmp_sprite;
-				nb_of_displayed_sprites++;
+	for(unsigned int i=1;i<NB_SPRITE_MAX;i++) {
+		if (sprite_array[i].active) {
+			float sprite_vector_x = sprite_array[i].x - x ;
+			float sprite_vector_y = sprite_array[i].y - y ;
+			float plan_vector_x = const_trig::fast_cos(player_angle) ;
+			float plan_vector_y = const_trig::fast_sin(player_angle) ;
+			float cos_current_angle_with_sprite = (sprite_vector_x*plan_vector_x+sprite_vector_y*plan_vector_y);
+			float sin_current_angle_with_sprite = (sprite_vector_y*plan_vector_x-sprite_vector_x*plan_vector_y);
+			float tan_current_angle_with_sprite = (sin_current_angle_with_sprite/cos_current_angle_with_sprite+0.0000001);
+				if (tan_current_angle_with_sprite > -0.4 && tan_current_angle_with_sprite < 0.6 && cos_current_angle_with_sprite > 0) {
+				  // Calcul de la distance pour la gestion du z_buffer --------------------------------------------------------------
+					float dist_with_sprite = sqrt(sprite_vector_x*sprite_vector_x+sprite_vector_y*sprite_vector_y)+0.0000001;
+					zbuffer_sprite_t tmp_sprite = {sprite_array[i].type, dist_with_sprite, tan_current_angle_with_sprite};
+					zbuffer_sprite_array[nb_of_displayed_sprites] = tmp_sprite;
+					nb_of_displayed_sprites++;
+			} // fin de if.
 		} // fin de if.
 	} // fin de boucle for.
 	sort(zbuffer_sprite_array, nb_of_displayed_sprites);
@@ -331,15 +330,15 @@ void Ray_engine::render(SDL_Renderer* renderer){
 // Du plus loin au plus proche
 void sort(zbuffer_sprite_t* array, unsigned int len_array) {
 	unsigned int i, j;
-	float current_max_value;
-	unsigned int current_max_index;
+	float current_max_value ;
+	unsigned int current_max_index ;
 	for(i=0;i<len_array;i++) {
-		current_max_index=i;
-		current_max_value = array[i].dist_with_sprite;
+		current_max_value = array[0].dist_with_sprite;
+		current_max_index = i;
 		for(j=i+1;j<len_array;j++) {
-			if (array[i].dist_with_sprite > current_max_value) {
+			if (array[j].dist_with_sprite > current_max_value) {
 				current_max_index = j;
-				current_max_value = array[i].dist_with_sprite;
+				current_max_value = array[j].dist_with_sprite;
 			} // fin if,
 		} // fin j,
 		zbuffer_sprite_t tmp ;

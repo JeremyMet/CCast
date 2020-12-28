@@ -21,6 +21,7 @@
 #define __NB_AMMO__ 128
 
 extern Sprite sprite_array[NB_SPRITE_MAX];
+extern Level current_level;
 
 class Player {
 
@@ -31,7 +32,9 @@ class Player {
     float y ;
     float speed_step ;
     int angle, speed_angle ;
-	  Level* current_level;
+
+    unsigned int current_missile_index;
+    unsigned int remaining_missile;
 
 
   public:
@@ -46,7 +49,6 @@ class Player {
     float get_y() ;
     int get_angle() ;
     bool get_leave();
-    void set_level(Level* my_level);
     void input_from_keyboard();
 
 

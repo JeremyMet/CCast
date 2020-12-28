@@ -6,8 +6,7 @@
 #define NB_WALL_TEXTURE 2
 #define NB_FLOOR_TEXTURE 5
 #define NB_SPRITE_TEXTURE 1
-
-
 #define NB_SPRITE_MAX 2048
+#define PLAYER_SPRITE_INDEX 0
 
 #endif
