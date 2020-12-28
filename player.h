@@ -10,9 +10,17 @@
 #include "level.h"
 #include "const_trig.h"
 #include "level.h"
+#include "sprite.h"
+#include "engine_constants.h"
 
-#define __DEFAULT_ANGLE_SPEED__ 100 // 1 does actually mean 0.1 degree
-#define __DEFAULT_STEP_SPEED__ 0.05
+#include <iostream>
+
+
+#define __DEFAULT_ANGLE_SPEED__ 11 // 1 does actually mean 0.1 degree
+#define __DEFAULT_STEP_SPEED__ 0.01
+#define __NB_AMMO__ 128
+
+extern Sprite sprite_array[NB_SPRITE_MAX];
 
 class Player {
 
@@ -22,9 +30,9 @@ class Player {
     float x ;
     float y ;
     float speed_step ;
-    int angle, speed_angle ;    
-	Level* current_level ; 
-	
+    int angle, speed_angle ;
+	  Level* current_level;
+
 
   public:
 

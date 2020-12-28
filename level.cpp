@@ -19,8 +19,11 @@ Level::~Level()
   for(int i=0;i<height;i++)
   {
 	delete[] this->wall_array[i] ;
+  delete[] this->floor_array[i] ;
+
   }
   delete[] this->wall_array ;
+  delete[] this->floor_array ;
 }
 
 Level::Level(std::string path)
@@ -62,14 +65,14 @@ bool Level::load(std::string path) {
 	this->wall_array = new unsigned int*[height];
 	this->floor_array = new unsigned int*[height];
 	for(int i=0 ; i < this->height ; i++) { wall_array[i] = new unsigned int[width] ; floor_array[i] = new unsigned int[width] ; }
-	
+
 	int line = 0 ;
 	while(std::getline(file, local) && line < this->height)
 	{
 	   for(int i=0;i<this->width;i++) {this->wall_array[line][i] = int(local.at(i << 1)-'0') ; }
 	   line++ ;
 	}
-	line = 0 ; 
+	line = 0 ;
 	//std::getline(file, local); // separator between walls and floor
 	while(std::getline(file, local) && line < this->height)
 	{

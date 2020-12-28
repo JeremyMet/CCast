@@ -6,7 +6,3 @@ std::string local ;
 local = left ? my_string.substr(0, pos) : my_string.substr(pos+1) ;
 return local ;
 }
-
-
-
-

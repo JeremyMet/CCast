@@ -189,7 +189,7 @@ namespace const_trig {
     // Should be between 0 and 360*10.
 	float fast_cos(unsigned int angle);
 	float fast_sin(unsigned int angle);
-    
+
 
 
 
